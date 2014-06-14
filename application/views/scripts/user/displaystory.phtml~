@@ -1,0 +1,33 @@
+    
+
+    <?php
+        //$this->story = "cat1_nosebleeding.html";
+        include "../public/$this->story"
+    ?>
+
+    
+    <div  DIR="RTL">
+        <ul>
+            <?php
+            if (isset($this->advices)) {
+                foreach ($this->advices as $advice) {
+                    ?>
+
+                    <li><strong><?= $advice['question'] ?></strong><br>
+                    <?= $advice['answer'] ?><br><br>
+                    </li>
+
+
+                    <?php
+                }
+            }
+            ?>
+        </ul>
+        
+        
+    </div>
+
+    
+
+</body>
+

@@ -1,0 +1,61 @@
+<br /><br />
+
+
+<div  style="padding: 25px;">
+    <table class = "table" DIR="rtl">
+        <thead>
+            <tr >
+                <td> <strong>
+                        اسم القصه  </strong>
+                </td>
+                <td> <strong>
+                        التصنيف </strong>
+                </td>
+                <td> <strong>
+                        عدد مرات مشاهده القصص المتحركه  </strong>
+                </td>
+                <td> <strong>
+                        عدد مرات مشاهده القصص الثابته  </strong>
+                </td>
+
+            </tr>
+        </thead>
+<?php
+$i = -1;
+foreach ($this->evaluate as $evaluates) {
+    $i ++;
+            if ($i % 2 == 0) {
+                echo "<tr class='success'>";
+            } elseif ($i % 2 == 1) {
+                echo "<tr class='active' >";
+            }
+    ?>
+                <td>
+            <?= $evaluates['sName'] ?>
+                </td>
+                <td>
+                    <?= $evaluates['catName']?>
+                </td>
+                <td>
+                    <?= $evaluates['watchStory']?>
+                </td>
+                <td>
+                    <?= $evaluates['watchSteps']?>
+                </td>
+
+
+            </tr>
+
+
+
+                    <?php
+                }
+                ?>
+
+    </table>
+</div>
+
+
+
+
+

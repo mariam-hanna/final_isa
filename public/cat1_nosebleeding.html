@@ -1,0 +1,641 @@
+<br /><br />
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<!-- head and style --->
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        #container
+        {
+            height: 400px;
+            position: relative;
+            width: 400px;
+        }
+
+        #f1
+        {
+            bottom: 0;
+            top: 224px;
+            left: -771px;
+            position: absolute;
+            width: 215%;
+            visibility:hidden
+        }
+        #f2
+        {
+            bottom: 0;
+            top: 224px;
+            left: -771px;
+            position: absolute;
+            width: 215%;
+            visibility:hidden
+        }
+        .btnExample {
+            color: #900;
+            background: #FF0;
+            font-weight: bold;
+            border: 1px solid #900;
+        }
+
+        .btnExample:hover {
+            color: #FFF;
+            background: #900;
+        }
+    </style>
+</head>
+
+
+
+<canvas id="mysandbox"  width="720"  height="450">
+
+</canvas>
+<audio controls id="4" style="display:none">
+    <source src="<?= $this->baseUrl() ?>/audio/cat1_story1_part1.m4a" >
+</audio>
+<audio controls id="5" style="display:none">
+    <source src="<?= $this->baseUrl() ?>/audio/cat1_story1_part2.m4a" >
+</audio>
+<audio controls id="6" style="display:none">
+    <source src="<?= $this->baseUrl() ?>/audio/cat1_story1_part3.m4a" >
+</audio>
+<input type="button" id="button1" onclick="userChoice()" value="button1" style="display:none;"/>
+
+<!-- start of question's form  -->
+<form id =f1 name="Qform" method="post" action="">
+    <br><br>
+    <table width="600px"  height="200" align="center" style="border:1px solid #000000;background-color:#CCCC99 ;
+           border:1px solid black;
+           opacity:0.6;
+           filter:alpha(opacity=60); /* For IE8 and earlier */">
+        <tr><td colspan=2></td></tr>
+        <tr><td colspan=2> </td></tr>
+        <tr>
+            <td colspan=2></td>
+            <td style="text-align:center" ><b><font color="#996600">تفتكر عم فطين هيعالج بندق ازاي ؟  </font></b> </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button id ="a1" class="btnExample"  value="a1"> يرجع راسه إلى الامام   </button>
+            </td> <td>
+                <button id ="a2" class="btnExample"  value="a2">يرجع راسه إلى الخلف  </button>
+
+            </td>
+        </tr>
+        <tr><td colspan=2> </td></tr>
+    </table>
+</form>
+<!--end of question's Form  -->
+
+<!-- start of continue form  -->
+<form id =f2 name="continueform" method="post" action="">
+    <br><br>
+    <table width="600px"  height="200" align="center" style="border:1px solid #000000;background-color:#CCCC99 ;
+           border:1px solid black;
+           opacity:0.6;
+           filter:alpha(opacity=60); /* For IE8 and earlier */">
+        <tr><td colspan=2></td></tr>
+        <tr><td colspan=2> </td></tr>
+        <tr>
+            <td colspan=2></td>
+            <td style="text-align:center" ><b><font color="#996600">تحب تعمل ايه ؟  </font></b> </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button id ="a21" class="btnExample"  value="a21"> تعرض القصة من اول وجديد !</button>
+            </td> <td>
+                <button id ="a22" class="btnExample"  value="a22"> اسئلة على القصة ! </button>
+
+            </td>
+        </tr>
+        <tr><td colspan=2> </td></tr>
+    </table>
+</form>
+<!--end of question's Form  -->
+
+
+
+<script type='text/javascript'>
+
+    //var dialog = [0, 40, 90, 170, 290, 368];
+    var count = -1;
+    var index = 0;
+    var flagLoad = 0;
+    var sound = document.getElementById("4");
+    var t_steps = document.getElementById("5");
+    var haydaya = document.getElementById("6");
+    var bondo2Scale = 2;
+    var fateenScale = 2.14;
+    var  playingSound ;
+
+    /*************Question Part *************/
+    /*************BGIN *************/
+    var userAnswer;
+    function showQuestion() {
+        document.Qform.style.visibility = "visible";
+    }
+    function pause()
+    {
+        stop_my_int();
+        showQuestion();
+    }
+    a1.addEventListener('click', function(e) {
+        userAnswer = 1;
+        document.Qform.style.visibility = "hidden";
+        e.preventDefault();
+        t_steps.play();
+        setTimeout(function() {
+            //window.location.href = "../../";
+            startAid();
+        }, 3000);
+        setTimeout(function() {
+            microcroomAppearance();
+        }, 15000);
+        //startAid();
+    }, false);
+    a2.addEventListener('click', function(e) {
+        userAnswer = 2;
+        document.Qform.style.visibility = "hidden";
+        e.preventDefault();
+        t_steps.play();
+        setTimeout(function() {
+            //window.location.href = "../../";
+            startAid();
+        }, 3000);
+        setTimeout(function() {
+            microcroomAppearance();
+        }, 15000);
+        //startAid();
+    }, false);
+    function start() {
+        my_interv = setInterval(noseBleeding, 800);
+    }
+    function startAid() {
+        my_interv2 = setInterval(fatemHelpingBondo2, 800);
+    }
+    var start_my_int = function() {
+        start();
+    }
+    var stop_my_int = function() {
+        clearInterval(my_interv2);
+        my_interv = 0;
+    }
+    /*************Question Part *************/
+    /*************END *************/
+
+    /***stop sound when changing window***/
+    function pauseSound(arr_sound) {
+        //var playingSound;
+        playingSound = 'none';
+        for(i=0;i<arr_sound.length;i++){
+            if (!arr_sound[i].paused) {
+                arr_sound[i].pause();
+                playingSound = arr_sound[i];
+            }
+        }
+    }
+    /***play sound again***/
+    function playSound() {
+        if(playingSound!=='none'){
+            playingSound.play();     
+        }
+    }
+    /*******************************/
+    window.addEventListener('blur',function(){
+	pauseSound([sound,t_steps,haydaya]);			
+    }, false);
+    
+    window.addEventListener('focus',function(){
+	playSound();			
+    }, false);
+
+
+    /*************Continue Part *************/
+    /*************BGIN *************/
+
+    function showContinue() {
+        document.continueform.style.visibility = "visible";
+    }
+
+    a21.addEventListener('click', function(e) {
+        // userAnswer = 1;
+        document.continueform.style.visibility = "hidden";
+        e.preventDefault();
+        location.reload();
+    }, false);
+    a22.addEventListener('click', function(e) {
+        //userAnswer = 2;
+        document.continueform.style.visibility = "hidden";
+        e.preventDefault();
+        window.location.href = '../../quiz';
+    }, false);
+
+    /*************continue Part *************/
+    /*************END *************/
+
+    function Sprite(image, frames, x, y, widthFactor) {
+        this.image = image;
+        this.frames = frames;
+        this.widthFactor = widthFactor || 0;
+        this.w = (image.width / frames) - this.widthFactor;
+        this.h = (image.height);
+        this.x = x || 0;
+        this.y = y || 0;
+        this.currentFrame = 0;
+
+        this.nextFrame = function() {
+            this.currentFrame++;
+            if (this.currentFrame == this.frames) {
+                this.currentFrame = 0;
+            }
+
+        }
+
+        this.render = function() {
+            this.nextFrame();
+        }
+    }
+
+
+
+//------------------------------------------------------------------------------//
+    function renderAnimation() {
+        var dialog = [0, 40, 90, 170, 290, 368];
+        count++;
+
+        if (count == 320) {
+            count = 0;
+            clearInterval(scene1_id);
+            sprites = [];
+            var s2 = new Sprite(Nosebleed, 11, 500, 165, 0.32);
+            sprites[0] = s2;
+            var s3 = new Sprite(fatenStand, 4, 265, 53);
+            sprites[1] = s3;
+            scene1_id = start();//setInterval(noseBleeding, 800);
+        }
+        else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+
+
+            for (var i = 0; i < sprites.length; i++) {
+                var s = sprites[i];
+                s.render();
+
+                if (count > 0 && count < 10 || count > 280 && count < 290 || count > 310 && count < 330) {
+                    if (s.image === bondo2) {
+                        ctx.drawImage(s.image,
+                                0, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / bondo2Scale, s.h / bondo2Scale);
+
+                    }
+
+                    else if (s.image === amFaten) {
+                        ctx.drawImage(s.image,
+                                3 * s.w, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / fateenScale, s.h / fateenScale);
+                    }
+                }
+
+
+
+
+                else if (s.image === bondo2 || s.image === Nosebleed) {
+                    if (count >= dialog[index] && count <= dialog[index + 1]) {
+                        ctx.drawImage(s.image,
+                                0, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / bondo2Scale, s.h / bondo2Scale);
+                    }
+                    else {
+                        ctx.drawImage(s.image,
+                                s.currentFrame * s.w, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / bondo2Scale, s.h / bondo2Scale);
+                    }
+                }
+                else {
+                    if (count >= dialog[index] && count <= dialog[index + 1]) {
+                        ctx.drawImage(s.image,
+                                s.currentFrame * s.w, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / fateenScale, s.h / fateenScale);
+                    }
+                    else {
+                        ctx.drawImage(s.image,
+                                3 * s.w, 0,
+                                s.w, s.h,
+                                s.x, s.y,
+                                s.w / fateenScale, s.h / fateenScale);
+                    }
+                }
+                if (count == dialog[index + 1]) {
+                    index += 2;
+                }
+            }
+        }
+    }
+
+//--------------------------------------bondo2 bleeding -------------------------------------//
+    var currentScale = 1;
+    // var sceneX =-800, sceneY = -300;
+    var sceneX = 0, sceneY = 0;
+    function noseBleeding() {
+
+
+        var c1 = 1;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.save();
+        //ctx.translate(sceneX, sceneY);
+        //ctx.scale(currentScale, currentScale);
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+
+
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+            s.render();
+
+            if (s.image === Nosebleed) {
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, 0,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / bondo2Scale, s.h / bondo2Scale);
+            }
+
+            else if (s.image === fatenStand) {
+                s.x -= 2 * c1;
+                s.y += 1 * c1;
+                c1++;
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, 0,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / fateenScale, s.h / fateenScale);
+                if (s.currentFrame == 3)
+                {
+                    //clearInterval(my_interv);
+                    var s4 = new Sprite(FateenStepToBondok, 6, 290, 70, 6);
+                    sprites[1] = s4;
+                    //sprites[1].render();
+                    c1 = 0;
+                }
+
+            }
+            else if (s.image === FateenStepToBondok)
+            {
+
+                s.x += 3 * c1;
+                s.y += 1 * c1;
+                c1++;
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, 0,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2.1, s.h / 2.1);
+                if (s.currentFrame == 5)
+                {
+                    animatedZoom();
+
+                }
+
+            }
+        }
+
+        //ctx.restore();
+    }
+
+
+
+    /***************************3LAAAG *********************************************/
+    function fatemHelpingBondo2()
+    {
+        if (count == 0)
+        {
+            pause();
+        }
+        count = 10;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(ZoomBG, 0, 0, canvas.width, canvas.height);
+
+
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+            s.render();
+
+
+            if (s.currentFrame == 5)
+            {
+                clearInterval(my_interv2);
+            }
+            ctx.drawImage(s.image,
+                    s.currentFrame * s.w, 0,
+                    s.w, s.h,
+                    s.x, s.y,
+                    s.w / 1.3, s.h / 1.3);
+
+        }
+
+
+
+
+    }
+
+    /******************************ZOOMING*******************************************/
+    function animatedZoom() {
+        var stepX = -70;
+        var stepY = -20;
+        var stepScale = (3.5 - 1) / 50;
+        var step = 0;
+        var intervalId = setInterval(function() {
+            sceneX += stepX;
+            sceneY += stepY;
+            currentScale += stepScale;
+            if (++step == 40) {
+                clearInterval(my_interv);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(Zoom, 0, 0, canvas.width, canvas.height);
+                sprites = [];
+                var s2 = new Sprite(ZoomAid, 6, 0, 0);
+                sprites[0] = s2;
+                count = 0;
+                scene1_id = startAid();
+                clearInterval(intervalId);
+
+            }
+        }, 30);
+    }
+
+
+//--------------------------------------------------------------------------------------------//
+    function addSprite() {
+        var s = new Sprite(bondo2, 14, 500, 165, 2.5);
+        sprites.push(s);
+        var s1 = new Sprite(amFaten, 8, 270, 120);
+        sprites.push(s1);
+    }
+
+//----------------------microcroom-------------------------------//
+
+    function renderAnimation2() {
+        var dialog = [10, 30, 80, 120];
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+
+
+        count++;
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+            s.render();
+
+
+            if (s.image === shanta) {
+                ctx.drawImage(s.image,
+                        3 * s.w, 0,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / fateenScale, s.h / fateenScale);
+
+                ctx.drawImage(microcroom,
+                        300, 100, microcroom.width / 2, microcroom.height / 2
+                        );
+            }
+
+            if (count > 0 && count < 10) {
+                if (s.image === bondo2) {
+                    ctx.drawImage(s.image,
+                            0, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / bondo2Scale, s.h / bondo2Scale);
+
+                }
+
+                else if (s.image === amFaten) {
+                    ctx.drawImage(s.image,
+                            3 * s.w, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / fateenScale, s.h / fateenScale);
+                }
+            }
+
+
+
+
+            else if (s.image === bondo2) {
+                if (count >= dialog[index] && count <= dialog[index + 1]) {
+                    ctx.drawImage(s.image,
+                            0, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / bondo2Scale, s.h / bondo2Scale);
+                }
+                else {
+                    ctx.drawImage(s.image,
+                            s.currentFrame * s.w, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / bondo2Scale, s.h / bondo2Scale);
+                }
+            }
+            else {
+                if (count >= dialog[index] && count <= dialog[index + 1]) {
+                    ctx.drawImage(s.image,
+                            s.currentFrame * s.w, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / fateenScale, s.h / fateenScale);
+                }
+                else {
+                    ctx.drawImage(s.image,
+                            3 * s.w, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / fateenScale, s.h / fateenScale);
+                }
+            }
+            if (count == dialog[index + 1]) {
+                index += 2;
+            }
+        }
+
+    }
+
+
+
+//----------------------------------------------------------------//        
+
+    function microcroomAppearance() {
+        sprites = [];
+        addSprite();
+        var micro = new Sprite(shanta, 15, 350, 100, 10);
+
+        count = -1;
+        index = 0;
+        haydaya.play();
+        setTimeout(function() {
+            sprites.push(micro);
+        }, 12500);
+
+        interval3 = setInterval(renderAnimation2, 100);
+        setTimeout(function() {
+            clearInterval(interval3);
+            showContinue();
+        }, 16000);
+    }
+
+    //---------------------------------------------//
+
+    var canvas = document.getElementById("mysandbox");
+    var ctx = canvas.getContext('2d');
+
+    var sprites = [];
+    var images = [];
+    var bondo2 = new Image();
+    var amFaten = new Image();
+    var backGround = new Image();
+    var Nosebleed = new Image();
+    var fatenStand = new Image();
+    var FateenStepToBondok = new Image();
+    var ZoomBG = new Image();
+    var microcroom = new Image();
+    var ZoomAid = new Image();
+    var Zoom = new Image();
+    var shanta = new Image();
+    bondo2.src = '<?= $this->baseUrl() ?>/images/story1_1/Bondok_sitting_talking.png';
+
+    ZoomBG.src = '<?= $this->baseUrl() ?>/images/story1_1/ZoomBG.jpg';
+    ZoomAid.src = '<?= $this->baseUrl() ?>/images/story1_1/Zoom Aid.png';
+    Zoom.src = '<?= $this->baseUrl() ?>/images/story1_1/Zoom.jpg';
+    Nosebleed.src = '<?= $this->baseUrl() ?>/images/story1_1/Nosebleed.png';
+    fatenStand.src = '<?= $this->baseUrl() ?>/images/story1_1/Fateen standing.png';
+    shanta.src = '<?= $this->baseUrl() ?>/images/story1_1/kitAnimation.png';
+    microcroom.src = '<?= $this->baseUrl() ?>/images/story1_1/microcroom.png';
+
+    FateenStepToBondok.src = '<?= $this->baseUrl() ?>/images/story1_1/Fateen Step To Bondok.png';
+
+    bondo2.onload = function() {
+        amFaten.src = '<?= $this->baseUrl() ?>/images/story1_1/Am fateen sitting talking.png';
+        amFaten.onload = function() {
+            backGround.src = '<?= $this->baseUrl() ?>/images/story1_1/HomeBackground.jpg';
+            backGround.onload = function() {
+                addSprite();
+
+                scene1_id = setInterval(renderAnimation, 100);
+                sound.play();
+            }
+        }
+    }
+
+
+</script>

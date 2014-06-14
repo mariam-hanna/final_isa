@@ -1,0 +1,95 @@
+
+<br><br><br>
+<?php
+    if(isset($this->lock)){
+?>
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>
+           ممممممممممممم
+        </h4> <strong>لازم تعدي علي القصص بالترتيب و تجاوب علي الاسئلة الاول </strong>   <a href="" onclick="window.history.go(-1);
+                return false;" class="alert-link">الرجوع</a> او <a href="../user">الرئيسية</a>
+    </div>
+<?php      
+    }
+    else if(isset($this->exist)){
+
+?>
+
+     <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>
+           ممممممممممممم
+        </h4> <strong>هذه القصه تحتوي على صور ثابته فقط </strong>   <a href="" onclick="window.history.go(-1);
+                return false;" class="alert-link">الرجوع</a> او <a href="../user">الرئيسية</a>
+    </div>
+
+<?php
+    }
+
+?>
+<div  style="padding: 25px;">
+    <table class = "table" DIR="rtl">
+        <thead>
+            <tr >
+                <td> <strong>
+                        القصص  </strong>
+                </td>
+
+
+            </tr>
+        </thead>
+        <?php
+        $i = -1;
+        foreach ($this->stories as $story) {
+            $i ++;
+            if ($i % 2 == 0) {
+                echo "<tr class='success'>";
+            } elseif ($i % 2 == 1) {
+                echo "<tr class='active' >";
+            }
+            if ($story['static'] == 0){
+            ?>
+
+            
+                <td>
+                   <?= $story['name'] ?>
+                </td>
+                <td>
+                    <a href="<?= $this->baseUrl() ?>/user/displaystory/story/<?=$story['path']?>">عرض صور متحركة</a>
+                </td>
+
+                <td>
+                    <a href="<?= $this->baseUrl() ?>/user/displaysteps/story/<?=$story['path']?>">عرض صور ثابتة</a>
+                </td>
+
+            </tr>
+
+            <?php
+            }
+            else{
+
+            ?>
+            
+                <td>
+                   <?= $story['name'] ?>
+                </td>
+                <td>
+                    
+                </td>
+
+                <td>
+                    <a href="<?= $this->baseUrl() ?>/user/displaysteps/story/<?=$story['path']?>">عرض صور ثابتة</a>
+                </td>
+
+            </tr>
+            <?php
+            }
+        }
+        ?>
+
+    </table>
+</div>
+
+
+

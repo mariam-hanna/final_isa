@@ -1,0 +1,318 @@
+
+
+     
+     	<canvas id="story" style="border:1px solid #000000;position:absolute;top:0" width="720" height="450"></canvas>
+     	<audio controls id="sound" style="display:none">
+    		<source src="<?= $this->baseUrl() ?>/audio/story1_2.3ga" >
+		</audio>
+	</div>                      
+         <script src="jquery-1.11.0.js" type="text/javascript"> </script>
+        <script type='text/javascript'>
+
+
+/**************************************/
+ sound = document.getElementById('sound');
+	/***stop sound when changing window***/
+function pauseSound(arr_sound) {
+    playingSound = 'none';
+    for(i=0;i<arr_sound.length;i++){
+        if (!arr_sound[i].paused) {
+            arr_sound[i].pause();
+            playingSound = arr_sound[i];
+        }
+    }
+}
+/***play sound again***/
+function playSound() {
+    if(playingSound!=='none'){
+        playingSound.play();     
+    }
+}
+	/***stop interval when changing window***/
+function pauseInterval() {
+    clearInterval(playInterval);
+}
+
+	/***resume interval again***/
+function playedInterval() {
+    playInterval = setInterval(renderAnimation, 333.4);
+		
+}
+/*******************************/
+window.addEventListener('blur',function(){
+pauseInterval ();
+pauseSound([sound]);			
+}, false);
+
+window.addEventListener('focus',function(){
+playedInterval();
+playSound();			
+}, false);
+           
+            /*------------------------- variable defination ---------------------*/
+            var canvas         = document.getElementById("story");
+            var ctx            = canvas.getContext('2d');
+            var sprites        = [];
+            var backGround     = new Image();
+            var fateenReading  = new Image();
+            var bondo2Check    = new Image();
+            var bag            = new Image();
+            var lozaTalking    = new Image();
+            var remember       = new Image();
+            var bondo2Angry    = new Image();
+            var fateenStanding = new Image(); 
+            var fateenWalking  = new Image();
+            var fateenTalking  = new Image();
+            var angry          = new Image();
+            var sadLoza        = new Image();
+						var Bondo2Turning  = new Image();
+
+            /****************************Dialogs***********************************/
+            var suond = document.getElementById('audio');
+
+            sound.play();
+
+            var bondo2Dialog = [1*3,3*3,6*3,8*3,9*3,13*3,16*3,18*3,20*3,22*3];
+            var lozaDialog   = [3*3,5*3,13*3,15*3,24*3,26*3,37*3,42*3];
+            var fateenDialog = [18*3,19*3,27*3,36*3,43*3,49*3];
+            var rememberTime = 8*3;
+
+            var fateenStandingTime = 10*3;
+            var bondo2AngryTime    = 60;
+
+            var bondo2Index = 0;
+            var lozaIndex   = 0;
+            var fateenIndex = 0;
+						var sadTimer    = 23*3;
+						var turningTimer = 19*3;
+
+            var timer      		= -1;
+            var counterRemeber =0;
+						var flagTurn       =0;
+
+            /*----------------------- variable initalization --------------------*/
+            backGround.src     = '<?= $this->baseUrl() ?>/images/story1_2/backgroung.jpg';
+            remember.src       = '<?= $this->baseUrl() ?>/images/story1_2/Bondok remembering.png';
+            bondo2Angry.src    = '<?= $this->baseUrl() ?>/images/story1_2/Bondok angry.png';
+            fateenStanding.src = '<?= $this->baseUrl() ?>/images/story1_2/Am fateen standing Garden scene.png';
+            fateenWalking.src  = '<?= $this->baseUrl() ?>/images/story1_2/Fateen Walking2.png';
+            angry.src          = '<?= $this->baseUrl() ?>/images/story1_2/Bondok angry.png';
+            fateenTalking.src  = '<?= $this->baseUrl() ?>/images/story1_2/Fateen standing talking.png';
+            sadLoza.src        = '<?= $this->baseUrl() ?>/images/story1_2/story1/Sad talking.png';
+       			Bondo2Turning.src  = '<?= $this->baseUrl() ?>/images/story1_2/story1/Bondok Turning.png';
+           /*----------------------- initalize the new sprite -------------------*/
+           function Sprite(image, frames, x, y ,row , last_remain_row, scale, widthShift, heightShift) {
+                this.image        = image;
+                this.frames       = frames;
+                this.widthShift   = widthShift || 0;
+                this.heightShift  = heightShift || 0;
+                //alert (scale[0]);
+                this.w            = image.width / frames -this.widthShift;
+                this.h            = image.height/row -this.heightShift;
+                this.saveHeight   = this.h;
+                this.saveWidth    = this.w;
+                this.x            = x || 0;
+                this.y            = y || 0;
+                this.saveY        = this.y;
+                this.currentFrame = 0;
+                this.currentRow   = 0 ;
+                this.scale        = scale[0] || 1;
+                this.staticFrame  = scale[1] || 0;
+
+                this.nextFrame = function() {
+                    this.currentFrame++;
+                    this.currentFrame %= this.frames;
+                    if (this.currentFrame==0)
+                    {
+                        this.currentRow++;
+                        if (this.currentRow==row)
+                        {
+                            this.currentFrame=0 ;
+                            this.currentRow=0;
+                            this.frames = frames;
+                        }
+                        else if(this.currentRow== row-1)
+                        {
+                            this.frames = frames - last_remain_row ;
+
+                        }
+                    
+                    }
+                }
+
+                this.render = function() {
+                    this.nextFrame();
+                }
+            }
+
+            /*-------------------- function to move sprite ----------------------------------*/
+            function renderAnimation() {
+                timer ++;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+               
+                for (var i = 0; i < sprites.length; i++) {
+                    var s = sprites[i];
+                    s.render(); 
+
+
+                    /******************** draw bondo2 ************/
+					if ((s.image === bondo2Check || s.image === bondo2Angry) && (timer >= bondo2Dialog[bondo2Index] && timer <= bondo2Dialog[bondo2Index+1])){
+						
+                        flag = 1;
+                        if (s.currentFrame == 9 && s.image === bondo2Check){
+                        	s.currentFrame = 5;
+                        }
+                        else if (s.currentFrame == 6 && s.image === bondo2Angry){
+                        	s.currentFrame = 2;
+                        }
+					}
+					else if (s.image === remember){
+						flag = 1;
+						if (s.currentFrame == 4){
+							flag =0;
+							s.currentFrame =3;
+							counterRemeber++;
+						}
+					}
+					else if (s.image === Bondo2Turning){
+							flag = 1;
+						if (s.currentFrame == 3){
+							flagTurn = 1;
+						}
+						if (flagTurn == 1){
+							flag = 0;
+						}
+						if (timer > bondo2Dialog[(bondo2Dialog.length)-1]){
+							flag = 1;
+							s.currentFrame = 2;
+						}
+					}
+					/****************** draw loza ***************************/ 
+					else if ((s.image === lozaTalking || s.image === sadLoza ) && (timer >= lozaDialog[lozaIndex] && timer <= lozaDialog[lozaIndex+1])){
+						flag = 1;
+					}
+					/***************** draw fateen ************************/
+					else if (s.image === fateenReading || s.image === fateenStanding || s.image === fateenWalking){
+						flag = 1;
+						if (s.currentFrame == 6 && s.image === fateenStanding){
+							sprites[0] = new Sprite(fateenWalking,9,16,45,1,0,[1.75,8],5)
+						}
+						if(s.image === fateenWalking ){	
+	          				if (s.currentFrame === 8){
+	                            sprites[0] = new Sprite(fateenTalking,8,350,26,1,0,[1.75,7],3.5);//350
+	                            
+	          				}
+	          				else{
+	          					s.x+=25; //25
+											s.y-=4;
+	          				}	  
+	                    }
+					}
+
+					else if (s.image === fateenTalking && (timer >= fateenDialog[fateenIndex] && timer <= fateenDialog[fateenIndex+1])){
+						flag = 1;
+					}
+
+					/************************** draw bag **************************/
+					else if (s.image === bag){
+						flag = 1;
+					}
+					
+					/************************ draw static bondo2, loza and fateen ************************/
+					else{
+						flag =0;
+					}
+
+					/****************** to draw move images ***********************/
+					if (flag == 1){
+						ctx.drawImage(s.image,
+                        s.currentFrame * s.w, s.currentRow * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w/s.scale, s.h/s.scale);
+					}
+					/***************** to draw static images ******************/
+					else{
+
+						ctx.drawImage(s.image,
+                        s.staticFrame * s.w, s.currentRow * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w/s.scale, s.h/s.scale);
+					}
+
+					/****************** to change index and images**************/
+					if (timer == rememberTime){
+						bondo2Remember = new Sprite(remember,5,60,20,1,0,[1.5,4],14);
+                      	sprites[1] = bondo2Remember;
+					}
+
+					if (timer == lozaDialog[lozaIndex+1]){
+						
+						lozaIndex += 2;
+					}
+					if (timer == bondo2Dialog[bondo2Index+1]){
+						bondo2Index += 2;
+					}
+					if (timer == fateenDialog[fateenIndex+1]){
+						fateenIndex += 2;
+					}
+
+					if (timer == fateenStandingTime){
+						sprites[0] = new Sprite(fateenStanding, 7, 30, 30 , 1 ,0,[1.75,6],3.5);
+					}
+			
+					if (counterRemeber == 2){
+							sound.pause();
+					}
+
+					if (counterRemeber == 4){
+						sound.play();
+						sprites[1] = new Sprite(bondo2Angry,7,380,162,1,0,[1.5,6],3);
+						counterRemeber =6;
+					}
+
+					if(timer == sadTimer){                            
+						sprites[2] = new Sprite(sadLoza, 5, 500, 210 , 1 ,0, [1.5,1],2.4); 
+					}
+
+					if (timer == turningTimer){
+							sprites[1] = new Sprite(Bondo2Turning,4,380,162,1,0,[1.5,3],3);
+					}
+
+                    
+                }
+            }
+
+           /*--------------------- function to add new image ---------------------------------*/
+                function addSprite(img,frames,x,y,rowNumber,last_remain_row,widthShift,heightShift) {
+                var s = new Sprite(img,frames,x,y,rowNumber,last_remain_row,widthShift,heightShift);
+                sprites.push(s);  
+            }
+
+           /*-------------------- on load function -------------------------------------------*/
+            backGround.onload=function (){
+                 //ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+                fateenReading.src = '<?= $this->baseUrl() ?>/images/story1_2/Am fateen newspaper.png';
+                fateenReading.onload = function() {
+                    bondo2Check.src = '<?= $this->baseUrl() ?>/images/story1_2/Bondok checking the candy bag.png';
+                    bondo2Check.onload = function(){    
+                        bag.src = '<?= $this->baseUrl() ?>/images/story1_2/Candy bag.png';
+                        bag.onload = function() {   
+                            lozaTalking.src = '<?= $this->baseUrl() ?>/images/story1_2/Looza talking.png';
+                            lozaTalking.onload = function(){
+                                addSprite(fateenReading, 2, 47, 126.5 , 1 , 0, [1.4, 0], 1.8);
+                                addSprite(bondo2Check, 10, 330, 150 , 1 , 0, [1.5, 8], 4); 
+                                addSprite(lozaTalking, 5, 500, 210 , 1 , 0, [1.5, 1], 4); 
+                                addSprite(bag, 1, 500, 360 , 1 , 0, [2.5]);                            
+                                playInterval = setInterval(renderAnimation, 333.4);
+                            }
+                        }
+                    }
+                }
+            }
+
+        </script>
+    </body>
+</html>

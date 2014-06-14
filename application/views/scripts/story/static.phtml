@@ -1,0 +1,28 @@
+<br /><br />
+<div id="view-content" style="padding: 25px;" dir="rtl">
+    <?php
+    
+    $sname = $this->sname;
+    $imgFolder = $this->imgFolder;
+    $cat =  $this->cat;
+    $level = $this->level;
+    $type = $this->type;
+    $baseUrl = $this->baseUrl();
+    $path = "/var/www/bondo2Loza/public/images/".$imgFolder;
+    if (!file_exists($path)) {
+    mkdir($path, 0777);
+    if ($type==1)
+        {
+        $path = "/var/www/bondo2Loza/public/images/".$imgFolder."/static";
+        if (!file_exists($path)) {
+        mkdir($path, 0777);
+        }
+        }
+    }
+     
+   
+    echo $this->staticStoryForm;
+   
+        
+    ?>   
+</div>

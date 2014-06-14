@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<html>
+
+<body>
+
+	<div class="content">
+		<div>
+			<div class="content">
+		<div>
+			<br><br><br><br><br>
+			<div id="services">
+				<div id="sidebar">
+					<h3>Our Education</h3>
+					<ul>
+						<li id="vision">
+						
+							<font size="5"> <a href=""> دكتور ميكروكروم</a> </font> <br>
+							<font size="5"> <a href=""> عم فطين</a> </font>
+						</li>
+						
+					</ul>
+				</div>
+				<div id="aside">
+					
+<div class="carousel slide" id="carousel-237516">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-237516">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-237516">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-237516">
+					</li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item active">
+						<img alt="" src="<?= $this->baseUrl() ?>/images/baby.jpg" />
+						<div class="carousel-caption">
+							<h4>
+								First Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="http://lorempixel.com/1600/500/sports/2" />
+						<div class="carousel-caption">
+							<h4>
+								Second Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="" src="http://lorempixel.com/1600/500/sports/3" />
+						<div class="carousel-caption">
+							<h4>
+								Third Thumbnail label
+							</h4>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+						</div>
+					</div>
+				</div> <a class="left carousel-control" href="#carousel-237516" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-237516" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+				
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="footer">
+		<div>
+			<div>
+				<span>Follow us</span>
+				<a href="http://facebook.com/freewebsitetemplates" target="_blank" class="facebook">Facebook</a>
+				<a href="#" class="subscribe">Subscribe</a>
+				<a href="http://twitter.com/fwtemplates" target="_blank" class="twitter">Twitter</a>
+				<a href="http://www.flickr.com/freewebsitetemplates/" target="_blank" class="flicker">Flickr</a>
+			</div>
+			<ul>
+				<li>
+					<a href="#"><img src="images/playing-in-grass.gif" alt="Image" /></a>
+					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
+					<a href="#" class="readmore">Read more</a>
+				</li>
+				<li>
+					<a href="#"><img src="<?= $this->baseUrl() ?>/images/baby-smiling.gif" alt="Image" /></a>
+					<p>Sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud.</p>
+					<a href="#" class="readmore">Read more</a>
+				</li>
+			</ul>
+		</div>
+		<p class="footnote">&copy; Special School. All Rights Reserved.</p>
+	</div>
+</body>
+</html>

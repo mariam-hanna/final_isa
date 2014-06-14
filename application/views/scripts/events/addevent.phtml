@@ -1,0 +1,32 @@
+<br /><br />
+<div dir="rtl">
+<?php
+
+echo '<form method=post action=' . $this->baseUrl() . '/events/addevent role=form>';
+?>
+
+<?= $this->addEventForm->name ?>
+<?= $this->addEventForm->location ?>
+<?= $this->addEventForm->desc ?>
+    <h3> التاريخ:</h3>
+ <input type="datetime-local" name="eventDate" id='eventDate'>
+<?= $this->addEventForm->اضف ?>
+<?php
+echo "</form>";
+?>
+</div>
+<div> <?= $this->error?> </div>
+
+<script>
+    date = document.getElementById('eventDate');
+    
+    sub=document.getElementById("s");
+		sub.addEventListener('click',function(e){
+			if (date.value === ""){
+                       // alert(date.value);
+                            e.preventDefault();
+                       }
+                        
+		});
+</script>
+  

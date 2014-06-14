@@ -1,0 +1,24 @@
+<br><br><br>
+
+<form action="\html_lab\Doc" method="post" >
+<fieldset >
+<legend DIR="rtl"> <font size="7">تفاصيل الحدث</font></legend>
+<h2 dir="rtl"> الاسم </h2>
+<?php
+    foreach ($this->event as $event) {
+?>
+<div dir="rtl"><font size='5'><?= $event['name'] ?></font></div>
+<h2 dir="rtl"> المكان</h2>
+<div dir="rtl"><font size='5'><?= $event['location'] ?></font></div>
+<h2 dir="rtl">الوقت</h2>
+<div dir="rtl"><font size='5'><?= $event['date'] ?></font></div>
+<h2 dir="rtl">معلومات</h2>
+<div dir="rtl"><font size='5'><?= $event['description'] ?></font></div>
+
+<?php
+    }
+?>
+
+</fieldset>
+
+</form>

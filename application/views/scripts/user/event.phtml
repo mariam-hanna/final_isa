@@ -1,0 +1,72 @@
+<link href='<?= $this->baseUrl() ?>/css/fullcalendar.css' rel='stylesheet' />
+<link href='<?= $this->baseUrl() ?>/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+<!--jQuery-->
+<script src='<?= $this->baseUrl() ?>/js/jquery-1.9.1.min.js'></script>
+<script src='<?= $this->baseUrl() ?>/js/jquery-ui-1.10.2.custom.min.js'></script>
+
+<!--FullCalendar-->
+<script src='<?= $this->baseUrl() ?>/js/fullcalendar.min.js'></script>
+<script type="text/javascript"></script>
+<script type="text/javascript">
+
+    /*
+     jQuery document ready
+     */
+
+    $(document).ready(function()
+    {
+        /*
+         date store today date.
+         d store today date.
+         m store current month.
+         y store current year.
+         */
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        /*
+         Initialize fullCalendar and store into variable.
+         Why in variable?
+         Because doing so we can use it inside other function.
+         In order to modify its option later.
+         */
+
+        var calendar = $('#calendar').fullCalendar(
+                {
+                   header:
+            {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+            },
+            defaultView: 'agendaWeek',
+                    events: <?= $this->event ?>,
+                    selectable: true,
+                });
+
+    });
+
+</script>
+<style type="text/css">
+    body
+    {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 14px;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    }
+    #calendar
+    {
+        width: 500px;
+        margin: 0 auto;
+    }
+</style>
+
+
+<!--FullCalendar container div-->
+<div id="container">
+    <div id='calendar'></div>
+</div>

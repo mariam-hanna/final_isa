@@ -1,0 +1,676 @@
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+
+<canvas id="story" style="border:1px solid #000000;" width="720" height="450"></canvas>
+<canvas id="popup" style="position:relative;margin-left:160px;margin-top:-65%;border-radius: 200px;border:5px solid #380000 ;display:none" width="405" height="280"></canvas>
+<audio controls id="sound" style="display:none">
+    <source src="<?= $this->baseUrl() ?>/audio/cat2Story1.m4a" >
+</audio>
+<br><br>
+
+<div id="question" 
+	style="width:0;height:200;display:none;
+		border:2px solid;border-radius: 100px;
+		position:relative;top:-330;left:100;
+		background-color:rgb(56, 138, 18)">
+	<div id="questionBody" style="display:none">
+                
+		<font size="30" color="black"><p align="center">تحب تعمل ايه دلوقتي</p></font>
+		
+		<div id='ch1' style="width:150;height:30;
+			float: left;margin: 30px;
+			border:2px solid;border-radius: 100px;
+			position:absolute;top:80%;left:10%;
+			background-color:yellow" 
+			onmouseover="onMouseOver('ch1')"
+			onmouseout="onMouseOut('ch1')" 
+			onclick="replay()">
+		
+		 <p align="center">اشوف القصة تاني</p>
+		</div>
+
+		<div id="ch2" style="width:150;height:30;
+			float: left;margin: 30px;
+			border:2px solid;border-radius: 100px;
+			position:absolute;top:80%;left:50%;
+			background-color:yellow"
+			onmouseover="onMouseOver('ch2')"
+			onmouseout="onMouseOut('ch2')" 
+			onclick="quiz()">
+		
+		 <p align="center">اشوف اتعلمت اد ايه</p>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript'>
+
+    /* variable initalize */
+
+    var loadImg = 0;
+    var flag = 0;
+    var bondo2Flag = 0;
+    var canvas = document.getElementById("story");
+    var ctx = canvas.getContext('2d');
+    var sprites = [];
+    var friendPlay = new Image();
+    var bondo2Running = new Image();
+    var microRunning = new Image();
+    var microTalking = new Image();
+    var backGround = new Image();
+    var BackGround = new Image();
+    var Aid0 = new Image();
+    var Aid1 = new Image();
+    var Aid2 = new Image();
+    var Aid3 = new Image();
+    var zoom = new Image();
+    var freind = new Image();
+    var popup = document.getElementById("popup");
+    var ctxPopup = popup.getContext('2d');
+    var sound;
+    var startTimeMS = 0;
+    var startTimeMS1 = 0;
+    var startTimeMS2 = 0;
+    var firstTimer = 3000;
+    var secondTimer = 14000;
+    var thirdTimer = 18000;
+	var Interval1 = 'false';
+	var Interval2 = 'false';
+	var Interval3 = 'false';
+	var Interval4 = 'false';
+	var Interval5 = 'false';
+	var Interval6 = 'false';
+	var playingSound;
+	var playingInterval;
+    var playingTimer;
+    var remain1;
+    var remain2;
+    var remain3;
+
+    sound = document.getElementById('sound');
+/*******************************************/
+    function soundPlay(timer){
+        
+         startTimeMS = (new Date()).getTime();
+        soundTimer = setTimeout(function() {
+            pauseTimeSound (secondTimer);
+            sound.play();
+            
+            resumeSound(thirdTimer);
+        }, timer);
+    }
+
+    
+
+    function pauseTimeSound(pause){
+        startTimeMS1 = (new Date()).getTime();
+        pauseTimer = setTimeout(function() {
+            sound.pause();
+        }, pause);
+    }
+
+    function resumeSound(resume){
+        startTimeMS2 = (new Date()).getTime();
+        resumeTimer1 = setTimeout(function() {
+            sound.play();
+            //firstAidInterval = setInterval(firstAidStep2, 250);
+        }, resume);
+    }
+
+    soundPlay(firstTimer);
+    /****************************************************/
+
+		/***stop sound when changing window***/
+   function pauseSound(arr_sound) {
+        //var playingSound;
+        playingSound = 'none';
+        for(i=0;i<arr_sound.length;i++){
+            if (!arr_sound[i].paused) {
+                arr_sound[i].pause();
+                playingSound = arr_sound[i];
+            }
+        }
+    }
+    /***play sound again***/
+    function playSound() {
+        if(playingSound!=='none'){
+            playingSound.play();     
+        }
+    }
+
+        /***stop timer when changing window***/
+   function pauseTimerOut() {
+        //var playingSound;
+        playingTimer = 'none';
+        
+        remain1 = firstTimer - ( (new Date()).getTime() - startTimeMS );
+        firstTimer = remain1;
+
+        if (remain1 >= 0){
+           // alert (remain1);
+            clearTimeout(soundTimer);
+            playingTimer = 0;
+        }
+        else{
+
+            console.log (remain1);
+            remain2 = secondTimer - ( (new Date()).getTime() - startTimeMS1 );
+            secondTimer = remain2;
+            remain3 = thirdTimer - ( (new Date()).getTime() - startTimeMS2 );
+            thirdTimer = remain3;
+            console.log (remain2);
+            console.log (remain3);
+            if (remain2 >= 0){
+                clearTimeout(pauseTimer);
+                clearTimeout(resumeTimer1);
+                playingTimer = 1;
+            }
+            else if (remain3 > 0){
+                clearTimeout(resumeTimer1);
+                playingTimer = 2;
+            }
+            else{
+                playingTimer = 'none';
+            }
+        }
+    }
+    /***resume timer when changing window***/
+    function resumeTimer(){
+        if (playingTimer == 0){
+            soundPlay(remain1);
+        }
+        else if (playingTimer == 1){ 
+            pauseTimeSound(remain2);
+            resumeSound(remain3);
+        }
+        else if (playingTimer == 2){
+            resumeSound(remain3);
+        }
+    }
+
+		/***stop interval when changing window***/
+     function pauseInterval(arr_interval) {
+        //var playingSound;
+        playingInterval = 'none';
+        for(i=0;i<arr_interval.length;i++){
+            if (arr_interval[i] == 'true') {
+				if (i == 0 ){ 
+                  clearInterval(playInterval);
+            	   Interval1 = 'false'
+                  playingInterval = 0;
+
+				}
+                else if (i == 1) {
+                    clearInterval(firstAidInterval);
+                    Interval2 = 'false';
+                    playingInterval = 1;
+                }
+                else if (i == 2) {
+                    clearInterval(firstAidInterval);
+                    Interval3 = 'false';
+                    playingInterval = 2;
+                }
+                else if (i == 3) {
+                    clearInterval(firstAidInterval);
+                    Interval4 = 'false';
+                    playingInterval = 3;
+                }
+                else if (i == 4) {
+                    clearInterval(firstAidInterval);
+                    Interval5 = 'false';
+                    playingInterval = 4;
+                };
+            }
+        }
+    }
+		/***resume interval again***/
+    function playedInterval() {
+		//alert (playingInterval);		
+        if(playingInterval!=='none'){
+			if (playingInterval == 0 ){
+			    Interval1 = 'true' 
+                playInterval = setInterval(renderAnimation, 200);
+			} 
+            else if (playingInterval == 1) {
+                Interval2 = 'true';
+                firstAidInterval = setInterval(firstAidStep2, 700);
+            }
+
+            else if (playingInterval == 2) {
+                Interval3 = 'true';
+                firstAidInterval = setInterval(firstAidStep1, 400);
+            }
+            else if (playingInterval == 3) {
+                Interval4 = 'true';
+                firstAidInterval = setInterval(firstAidStep2, 250);
+            }
+            else if (playingInterval == 4) {
+                Interval5 = 'true';
+                firstAidInterval = setInterval(firstAidStep2, 500);
+            }; 
+
+        }
+    }
+    /*******************************/
+    window.addEventListener('blur',function(){
+	
+    pauseInterval ([Interval1,Interval2,Interval3,Interval4,Interval5]);
+    pauseTimerOut();
+    pauseSound([sound]);			
+    }, false);
+    
+  window.addEventListener('focus',function(){
+
+	
+    playedInterval();
+    resumeTimer();
+    playSound();			
+  }, false);
+
+  /**********Display story again OR take the Quiz*************/
+  function onMouseOver(btn){
+  		document.getElementById(btn).style.backgroundColor = 'rgb(206, 223, 220)';
+  }
+
+  function onMouseOut(btn){
+		document.getElementById(btn).style.backgroundColor = 'yellow';
+  }
+
+  function replay(){
+  		location.reload();
+  }
+
+  function quiz(){
+		window.location.href = '../../quiz';
+  }
+
+
+  function displayQuestion(){
+  	var changeWidth = setInterval(function(){ 
+                	document.getElementById('question').style.width = 
+                		parseInt(document.getElementById('question').style.width) + 10+"px";
+                	
+                	if (parseInt(document.getElementById('question').style.width) == 550){
+                		clearInterval(changeWidth);
+                		document.getElementById('questionBody').style.display = 'block';
+                	}
+                	
+                },20);	
+  }
+
+
+  /*******************************************************************************/
+    //images.push(friendPlay);
+    backGround.src = '<?= $this->baseUrl() ?>/images/story2_1/background.jpg';
+    BackGround.src = '<?= $this->baseUrl() ?>/images/story2_1/Background.jpg';
+    bondo2Running.src = '<?= $this->baseUrl() ?>/images/story2_1/Bondok running.png';
+    microTalking.src = '<?= $this->baseUrl() ?>/images/story2_1/Dr Talking.png';
+    microRunning.src = '<?= $this->baseUrl() ?>/images/story2_1/Dr Walking.png';
+    Aid0.src = '<?= $this->baseUrl() ?>/images/story2_1/Zoom Aid0.png';
+    Aid1.src = '<?= $this->baseUrl() ?>/images/story2_1/Zoom Knee Aid.png';
+    Aid2.src = '<?= $this->baseUrl() ?>/images/story2_1/Knee Aid 2.png';
+    Aid3.src = '<?= $this->baseUrl() ?>/images/story2_1/Zoom Aid 3.png';
+    zoom.src = '<?= $this->baseUrl() ?>/images/story2_1/zoom.png';
+    freind.src = '<?= $this->baseUrl() ?>/images/story2_1/Friend Playing.png';
+
+
+
+
+    function t_steps() {
+        popup.style.display = 'block';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(zoom, 520, 300, zoom.width * 1.5, zoom.height);
+
+        ctx.drawImage(freind,
+                6 * (freind.width) / 8 - 30, (freind.height) / 2,
+                (freind.width) / 8, (freind.height) / 2,
+                400, 150,
+                (freind.width) / 16, (freind.height) / 4);
+
+        ctx.drawImage(bondo2Running,
+                5 * (bondo2Running.width) / 6, 0,
+                (bondo2Running.width) / 6, (bondo2Running.height),
+                220, 230,
+                (bondo2Running.width) / 12, (bondo2Running.height) / 2);
+    }
+
+
+    function Sprite(image, frames, x, y, row, last_remain_row, widthShift, heightShift) {
+        this.image = image;
+        this.frames = frames;
+        this.widthShift = widthShift || 0;
+        this.heightShift = heightShift || 0;
+        this.w = image.width / frames - this.widthShift;
+        this.h = image.height / row - this.heightShift;
+        this.saveHeight = this.h;
+        this.saveWidth = this.w;
+        this.x = x || 0;
+        this.y = y || 0;
+        this.saveY = this.y;
+        this.saveX = this.x;
+        this.currentFrame = 0;
+        this.currentRow = 0;
+
+        this.die = function() {
+            this.dead = true;
+        }
+        this.nextFrame = function() {
+            this.currentFrame++;
+            this.currentFrame %= this.frames;
+            if (this.currentFrame == 0)
+            {
+                this.currentRow++;
+                if (this.currentRow == row)
+                {
+                    this.currentFrame = 0;
+                    this.currentRow = 0;
+                    this.frames = frames;
+                }
+                else if (this.currentRow == row - 1)
+                {
+                    this.frames = frames - last_remain_row;
+
+                }
+
+            }
+        }
+
+        this.render = function() {
+            this.nextFrame();
+        }
+    }
+
+    /* function to call every 100 ms*/
+    function renderAnimation() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+
+            s.render();
+
+            if (flag == 1 && s.image === friendPlay) {
+                ctx.drawImage(s.image,
+                        7 * s.w, 2 * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2, s.h / 2);
+
+            }
+            else if (s.image === microRunning) {
+                s.x += 20;
+                if (s.x >= 160) {
+                    s.x = 160;
+                    ctx.drawImage(s.image,
+                            8 * s.w, 0,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / 2, s.h / 2);
+                    sprites = [];
+
+                    addSprite(Aid0, 6, 0, 14, 2, 1, 26, 0);
+                    addSprite(microTalking, 7, 60, 200, 1, 0, 6, 0);
+                    clearInterval(playInterval);
+					Interval1 = 'false';
+                    Interval2 = 'true';										
+                    firstAidInterval = setInterval(firstAidStep2, 700);
+                }
+                else {
+                    ctx.drawImage(s.image,
+                            s.currentFrame * s.w, s.currentRow * s.h,
+                            s.w, s.h,
+                            s.x, s.y,
+                            s.w / 2, s.h / 2);
+                }
+            } else if (s.image === bondo2Running && bondo2Flag == 1) {
+
+                ctx.drawImage(bondo2Running,
+                        5 * s.w, 0,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2, s.h / 2);
+            } else {
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, s.currentRow * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2, s.h / 2);
+            }
+
+
+            if (s.image === bondo2Running && s.currentFrame == 5) {
+                bondo2Flag = 1;
+            }
+        }
+
+
+        if (s.image === friendPlay && s.currentRow == 2 && s.currentFrame == 7) {
+
+            flag = 1;
+            addSprite(bondo2Running, 6, 20, 150, 1, 0);
+            addSprite(microRunning, 9, 20, 200, 1, 0);
+
+        }
+
+
+    }
+    /*----------------------- Aid Function -----------------------*/
+
+    function firstAidStep1() {
+
+        t_steps();
+        ctxPopup.clearRect(0, 0, popup.width, popup.height);
+
+        ctxPopup.drawImage(BackGround, 0, 0, popup.width, popup.height);
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+
+            s.render();
+            if (s.image === Aid1 && s.currentRow == 0) {
+                s.h = s.saveHeight;
+                s.h -= 15;
+                s.y = s.saveY;
+            }
+            else if (s.image === Aid1 && s.currentRow == 1) {
+                s.h = s.saveHeight;
+                s.h -= 20;
+                s.y = s.saveY;
+                s.y += 3.8;
+
+            }
+            else if (s.image === Aid1 && s.currentRow == 2) {
+                s.h = s.saveHeight;
+                s.y = s.saveY;
+                s.y += 8;
+            }
+            else if (s.image === Aid1 && s.currentRow == 3) {
+                s.h = s.saveHeight;
+                s.y = s.saveY;
+                s.y += 11.8;
+            }
+            if (s.image === Aid1 && s.currentFramer == 0) {
+                s.w = s.saveWidth;
+                //s.w += 0.;
+            }
+            else if (s.image === Aid1) {
+                s.w = s.saveWidth;
+                s.w += 2;
+                s.x = s.saveX;
+                if (s.currentFrame%2 == 0 && s.currentRow == 3){
+                    s.x = s.saveX;
+                    s.x += 0.9;
+                }
+                else if (s.currentRow == 3 && s.currentFrame%2 == 1){
+                    s.x = s.saveX;
+                    s.x += 0.7;
+                }
+                /*else if (s.currentRow == 3 && s.currentFrame%2 == 0){
+                    s.x = s.saveX;
+                    s.x += 0.8;
+                }*/
+                /*else if (s.currentRow == 3 && s.currentFrame == 2){
+                    s.x = s.saveX;
+                    s.x -= 0.4;
+                }*/
+            }
+            if (s.image === microTalking) {
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, s.currentRow * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2, s.h / 2);
+            }
+            else {
+                ctxPopup.drawImage(s.image,
+                        s.currentFrame * s.w, s.currentRow * s.saveHeight,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 3, s.h / 3);
+            }
+
+            if (s.image === Aid1 && s.currentFrame == 5 && s.currentRow == 3) {
+                clearInterval(firstAidInterval);
+                if (!sound.paused) {
+                    setTimeout(function() {
+                        sprites = [];
+                        addSprite(Aid2, 6, 0, 14, 3, 2, 26, 0);
+                        addSprite(microTalking, 7, 60, 200, 1, 0, 6, 0);
+                        clearInterval(firstAidInterval);
+                        Interval3 = 'false';
+                        Interval4 = 'true';
+                        firstAidInterval = setInterval(firstAidStep2, 250);
+                    }, 1000);
+
+                }
+            }
+        }
+    }
+    /*----------------------- Aid step 2 ------------------------*/
+    function firstAidStep2() {
+        t_steps();
+        ctxPopup.clearRect(0, 0, canvas.width, canvas.height);
+        ctxPopup.drawImage(BackGround, 0, 0, popup.width, popup.height);
+        for (var i = 0; i < sprites.length; i++) {
+            var s = sprites[i];
+
+            s.render();
+            if (s.image === Aid2 && s.currentRow == 0 || s.image === Aid3 && s.currentRow == 0) {
+                s.h = s.saveHeight;
+                s.h -= 25;
+                s.y = s.saveY;
+                s.y += 1;
+            }
+            else if (s.image === Aid2 && s.currentRow == 1 || s.image === Aid3 && s.currentRow == 1) {
+                s.h = s.saveHeight;
+                s.h -= 20;
+                s.y = s.saveY;
+                s.y += 14;
+            }
+            else if (s.image === Aid2 && s.currentRow == 2 || s.image === Aid3 && s.currentRow == 2) {
+                s.h = s.saveHeight;
+                s.y = s.saveY;
+                s.y += 27;
+            }
+            if (s.image === Aid3 ){
+                if (s.currentFrame == 0){
+                    s.x = s.saveX;
+                    s.x += 1.5;
+                }
+                else if (s.currentRow == 1){
+                    s.x -= 0.3;
+                }
+                else if (s.currentRow == 2){
+                    s.x -= 0.3;
+                }
+            }
+
+            if (s.image === Aid0 && s.currentRow == 1) {
+                s.y = s.saveY;
+                s.y += 19;
+            }
+            if (s.image === microTalking) {
+                ctx.drawImage(s.image,
+                        s.currentFrame * s.w, s.currentRow * s.h,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 2, s.h / 2);
+            }
+            else {
+                ctxPopup.drawImage(s.image,
+                        s.currentFrame * s.saveWidth, s.currentRow * s.saveHeight,
+                        s.w, s.h,
+                        s.x, s.y,
+                        s.w / 3, s.h / 3);
+            }
+
+
+            if (s.image === Aid0 && s.currentFrame == 4 && s.currentRow == 1) {
+                sprites = [];
+                addSprite(Aid1, 6, 0, 14, 4, 0, 28.2, 3.2);
+                addSprite(microTalking, 7, 60, 200, 1, 0, 6, 0);
+                clearInterval(firstAidInterval);
+                Interval2 = 'false';
+                Interval3 = 'true';
+                firstAidInterval = setInterval(firstAidStep1, 400);
+                //firstAidInterval = setInterval(firstAidStep2, 500);
+
+            }
+            else if (s.image === Aid2 && s.currentFrame == 3 && s.currentRow == 2) {
+                sprites = [];
+                addSprite(Aid3, 6, 0, 14, 3, 4, 26.8, 0);
+                addSprite(microTalking, 7, 65, 200, 1, 0, 6, 0);
+                clearInterval(firstAidInterval);
+                Interval4 = 'false';
+                Interval5 = 'true';
+                firstAidInterval = setInterval(firstAidStep2, 500);
+
+            }
+            //last scene
+            else if (s.image === Aid3 && s.currentFrame == 1 && s.currentRow == 2) {
+
+                clearInterval(firstAidInterval);
+                Interval5 = 'false';
+                document.getElementById('question').style.display = 'block';
+               	displayQuestion();
+           
+            }
+
+        }
+    }
+
+
+    /*-----------------------------------------------------------*/
+
+
+    function addSprite(img, frames, x, y, rowNumber, last_remain_row, widthShift, heightShift) {
+        //alert (img);7
+        var s = new Sprite(img, frames, x, y, rowNumber, last_remain_row, widthShift, heightShift);
+        sprites.push(s);
+
+
+    }
+
+    function loadedImg(load) {
+        if (load === imagesName.length) {
+            addSprite(friendPlay, 8, 150, 100, 3, 0);
+            setInterval(renderAnimation, 500);
+        }
+    }
+
+
+    backGround.onload = function() {
+        friendPlay.src = '<?= $this->baseUrl() ?>/images/story2_1/Running and falling.png';
+        friendPlay.onload = function() {
+
+            addSprite(friendPlay, 8, 150, 100, 3, 0);
+			Interval1 = 'true';
+            playInterval = setInterval(renderAnimation, 200);
+        }
+    }
+
+</script>
+

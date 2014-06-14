@@ -1,0 +1,31 @@
+<br /><br />
+<div id="view-content" style="padding: 25px;" dir="rtl">
+	
+        <form class="btn active btn-block btn-success btn-default" action ="<?= $this->baseUrl() ?>/story/add" method="POST">
+
+        اسم القصة:<input name="story_name" type="text"><br>
+        اختر تصنيفا:
+        <select name='cat'>
+            <option value="">--- أختر ---</option>
+            <?php
+            for ($i = 0; $i < count($this->category); $i++) {
+                ?>
+                <option value="<?= $this->category[$i]['id']; ?>"><?= $this->category[$i]['name']; ?>
+                </option>
+                <?php
+            }
+            ?>
+        </select><br>
+         اختر أختبار:
+        <select name='quiz'>
+            <option value="">--- أختر ---</option>
+                <option value="NONE">NONE</option>
+                <option value="choice">choice</option>
+                <option value="arrange">arrange</option>
+        </select><br>
+        <input type="radio" name="type" value="2">صور متحركة<br> 
+        <input type="radio" name="type" value="1">صور ثابتة<br>
+       
+        <input type ="submit" value="أضف قصة "><br>
+    </form>
+</div>

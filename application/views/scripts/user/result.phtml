@@ -1,0 +1,28 @@
+<br><br><br><br><br>
+
+<?php
+if ($this->result == 'pass') {
+    ?>
+
+    <div class="alert alert-success alert-dismissable">
+        
+        <h4>
+            برااااافو 
+        </h4> <strong>مبروك</strong> دلوقتي تقدرتشوف قصص اكتر  <a href="../user" class="alert-link"> الرئيسية</a>
+    </div>  
+    <?php
+} else {
+    ?>
+    <div class="alert alert-dismissable alert-danger">
+        
+        <h4>
+            ياخسارة 
+        </h4> <strong>اجاباتك مش صح</strong> ارجع حاول تاني <a href="" onclick="window.history.go(-1);
+                return false;" class="alert-link">الاسئلة</a> او <a href="../user">الرئيسية</a>
+    </div>
+    <?php
+}
+?>
+
+<img src="<?=$this->baseUrl()?>/images/<?=$this->result?>.jpg">
+

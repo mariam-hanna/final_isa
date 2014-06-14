@@ -1,0 +1,135 @@
+
+<br><br><br>
+<div style="padding: 25px;">
+    <form method="post" action="result">
+        <ul>
+            <?php
+            if ($this->quizType[0]['quizType'] == 'choice') {
+
+                $count = 1;
+                foreach ($this->quiz as $questions) {
+                    $answers = split(",", $questions['answers']);
+                    ?>
+                    <li>
+                        <br><br>
+                        <h3><?= $questions['question'] ?></h3>
+                        <br><br>
+                        <input type="radio" name="ans<?= $count ?>" value="<?= $answers[0] ?>"  checked>
+                        <img class="roundrect" src="../cat1_quiz1/<?= $answers[0] ?>" width="200px" height="300px" onclick=check(<?= $count ?>,1)>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="ans<?= $count ?>" value="<?= $answers[1] ?>" >
+                        <img class="roundrect" src="../cat1_quiz1/<?= $answers[1] ?>" width="200px" height="300px" onclick=check(<?= $count ?>,2)>
+                        <input type="hidden" name="correct_ans<?= $count ?>" value="<?= $answers[2] ?>">
+                    </li>
+
+                    <?php
+                    $count++;
+                }
+                ?>
+
+                <script>
+                                    function makeChecked(q_no, ans_no){
+                                    ar btn = document.getElementsByName("ans" + q_no)[ans_no - 1];
+                                            btn.checked = 'true';
+                                    }
+
+                            function check(q, ans){
+                            makeChecked(q, ans);
+                            }
+
+                </script>
+
+
+
+                <?php
+            } else if ($this->quizType[0]['quizType'] == 'arrange') {
+                ?>
+                <h3><?= $this->quiz[0]['question'] ?></h3>
+                <br><br>
+                <?php
+                $randIndex = -1;
+                $rand = array(-1);
+
+                $arrange = $this->quiz[0];
+                $steps = split(",", $arrange['answers']);
+                for ($i = 0; $i < count($steps); $i++) {
+
+                    while (in_array($randIndex, $rand)) {
+                        $randIndex = rand(0, count($steps) - 1);
+                    }
+
+                    array_push($rand, $randIndex);
+                    ?>
+                    <div draggable="true" 
+                         ondragstart="return dragStart(event)"
+                         id="<?= $steps[$randIndex] ?>"
+                         style="float: left;margin:15px;">
+                        <img src="<?= $this->baseUrl() ?>/cat1_quiz2/<?= $steps[$randIndex] ?>" 
+                             width="100" height="100" style="border: 1px solid;border-radius: 10px"><br>
+                        <input type="hidden" name="<?= $i ?>" value="<?= $steps[$randIndex] ?>">
+                        اسحب من هنا
+                    </div>
+                    <?php
+                }
+                ?>
+                <div style="clear:both"></div>
+                <br><br>
+                <?php
+                for ($i = 0; $i < count($steps); $i++) {
+                    ?>
+                    <div 
+                        draggable="true" 
+                        ondragstart="return dragStart(event)"
+                        style="border:1px solid;float: left;margin: 10px;width: 200px;height: 200px"
+                        ndragenter="return dragEnter(event)" 
+                        ondrop="return dragDrop(event)" 
+                        ondragover="return dragOver(event)">
+                        <b><p align="center"><?= $i + 1 ?></p></b>
+                    </div>
+
+                    <?php
+                }
+                ?>
+                <div style="clear:both"></div> 
+                <script type="text/javascript">
+
+                                    function dragStart(ev) {
+                                    ev.dataTransfer.effectAllowed = 'move';
+                                            ev.dataTransfer.setData("Text", ev.target.getAttribute('id'));
+                                            ev.dataTransfer.setDragImage(ev.target, 0, 0);
+                                            return true;
+                                    }
+
+                            function dragEnter(ev) {
+                            event.preventDefault();
+                                    return true;
+                            }
+
+                            function dragOver(ev) {
+                            return false;
+                            }
+
+                            function dragDrop(ev) {
+                            var src = ev.dataTransfer.getData("Text");
+                                    ev.target.appendChild(document.getElementById(src));
+                                    ev.stopPropagation();
+                                    return false;
+                            }
+                </script>
+
+                <?php
+            }
+            ?>
+
+
+        </ul>
+        <br><br>
+        <input type="hidden" name='quizType' value="<?= $this->quizType[0]['quizType'] ?>">
+        <input type="submit" class='btn btn-success active btn-default'>
+    </form>
+</div>
+
+
+
+
+

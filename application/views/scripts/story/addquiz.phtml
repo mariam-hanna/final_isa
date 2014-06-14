@@ -1,0 +1,67 @@
+<br /><br /><!--
+<div style="padding: 25px;" dir="rtl">				
+    <?php/*
+    echo '<form method=post action=' . $this->baseUrl() . '/story/addquiz role=form>';
+    echo $this->addQuizForm;
+    echo '</form>';*/
+    ?>
+</div>-->
+
+<div style="padding: 25px;" dir="rtl">
+    <form enctype="multipart/form-data" action="<?=$this->baseUrl()?>/story/addquiz" method="POST">
+        <?php
+            if ($this->quizType == 'choice') {
+
+        ?>
+        السؤال الاول:<input type="text" name="q1" class="form-control" style="width: 300"><br>
+        الاختيار الاول: <input name="ch1_1" type="file" />
+        <br>
+        الاختيار الثاني: <input name="ch2_1" type="file" />
+        <br>
+        <input type="text" name="correct1" class="form-control" style="width: 300">
+        <br><br>
+        *****************************************************************
+        <br><br>
+        السؤال الثاني:<input type="text" name="q2" class="form-control" style="width: 300"><br>
+        الاختيار الاول: <input name="ch1_2" type="file" />
+        <br>
+        الاختيار الثاني: <input name="ch2_2" type="file" />
+        <br>
+        <input type="text" name="correct2" class="form-control" style="width: 300">
+        <?php
+            }
+            else if($this->quizType == 'arrange'){
+                
+        ?>
+        <div id="quiz">
+        السؤال: <input type="text" name="q1" class="form-control" style="width: 300">
+        <br><br>
+        <input name="step1" type="file"/>
+        <br>
+        </div>
+        <br>
+        <button class="btn btn-default active btn-default" type="button" onclick="addImage()">اضف خطوة اخري </button>
+        <br>
+        <script>
+            var i = 1;
+            function addImage(){
+                i++;
+                var quizForm = document.getElementById('quiz');
+                var newImage = document.createElement('input');
+                newImage.type = 'File';
+                newImage.name = "step"+i;
+                quizForm.appendChild(newImage);
+                quizForm.appendChild(document.createElement('br'))
+                console.log (i);
+            }
+        </script>
+        <?php
+                
+            }
+        ?>
+        <br><br>
+        <input type="hidden" name="quizType" value="<?=$this->quizType?>">
+        <input type="submit" value="اضف" class="btn btn-success active btn-default" />
+    </form>
+</div>
+

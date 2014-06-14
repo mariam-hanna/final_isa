@@ -1,0 +1,297 @@
+<head>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <link href="<?= $this->baseUrl() ?>/css/style.css" type="text/css">
+
+    <link href="<?= $this->baseUrl() ?>/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="<?= $this->baseUrl() ?>/style.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script type="text/javascript" src= "<?= $this->baseUrl() ?>/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?= $this->baseUrl() ?>/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<?= $this->baseUrl() ?>/slider.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="<?= $this->baseUrl() ?>/jquery.nivo.slider.js"></script>
+
+    <script type="text/javascript">
+        $(window).load(function() {
+            $('#slider').nivoSlider();
+        });
+    </script>
+
+    <style type="text/css" media="screen"> 
+        #menu li ul { display:none; position:absolute; } 
+        #menu li:hover ul{ display:block; }
+        #menu li ul li{ clear:both; border-style:none;}
+    </style>
+
+</head>
+
+<?php
+$user_data = Zend_Auth::getInstance()->getStorage()->read();
+?>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div id="logo">
+                <img src="<?= $this->baseUrl() ?>/images/Logo.png" width="120px" height="140px" style="position: absolute;top:0px">
+
+            </div>
+        </div>
+        <!-- end #header -->
+        <div id="menu">
+            <ul>
+                <?php
+                if (isset($user_data->id)) {
+                    ?>
+                    <li>
+                        <a href= "<?= $this->baseUrl() ?>/user/logout">الخروج  </a>
+                    </li>
+                    <?php
+                    if ($user_data->admin == "true") {
+                        ?>
+                    
+                        <li>
+                            <a href= "<?= $this->baseUrl() ?>/category">اضف للموقع</a> 
+                            <ul>
+                                <li class="current_page_item">
+                                    <a href= "<?= $this->baseUrl() ?>/category/addcategory">تصنيف</a>
+                                    <a href= "<?= $this->baseUrl() ?>/story">قصة</a>
+                                    <a href= "<?= $this->baseUrl() ?>/events/addevent">نشاط</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href= "#"> الاحصائيات</a> 
+                            <ul>
+                                <li class="current_page_item">
+                                    <a href= "<?= $this->baseUrl() ?>/evaluations/stories">الاكثر مشاهدة</a>
+                                    <a href= "<?= $this->baseUrl() ?>/evaluations/storystatistics">الكل</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href= "#"> رأي الزوار</a> 
+                            <ul>
+                                <li class="current_page_item">
+                                    <a href= "<?= $this->baseUrl() ?>/evaluations/evaluatesite">للموقع</a>
+                                    <a href= "<?= $this->baseUrl() ?>/evaluations/evaluatechild">للطفل</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        
+            
+                        <?php
+                    }
+                    if ($user_data->type == "parent" && $user_data->admin == 'false') {
+                        ?>
+
+                        <li>
+
+                            <a href= "<?= $this->baseUrl() ?>/user">التقييم</a>
+                            <ul>
+                                <li class="current_page_item">
+
+                                    <a href= "<?= $this->baseUrl() ?>/user/evaluatechild">قيم طفلك</a>
+                                    <a href= "<?= $this->baseUrl() ?>/user/evaluatesite">قيم الموقع</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <?php
+                    }
+                } else {
+                    ?>
+
+                    <li>
+                        <a href="<?= $this->baseUrl() ?>/user/signup">التسجيل</a>
+                    </li>
+                    <li>
+                        <a href="<?= $this->baseUrl() ?>/user/login">الدخول</a>
+                    </li>
+                    <?php
+                }
+                ?>
+                <li class="current_page_item"><a href="<?= $this->baseUrl() ?>/user/">الرئيسية</a></li>
+            </ul>
+        </div>
+
+
+        <!-- end #menu -->
+        <div id="page">
+            <div id="content">
+<?php echo $this->layout()->content; ?>
+
+                <div style="clear: both;">&nbsp;</div>
+            </div>
+            <!-- end #content -->
+            <div id="sidebar" dir="rtl">
+<?php if ($_SESSION['action'] != 'displaystory' ) { ?>
+                    <ul style="width: 100px;">
+
+                        <li><br><br>
+
+                            <img alt="" style="width:180%;height:100px" src="<?= $this->baseUrl() ?>/images/cat.jpg" />
+                            <br><br>
+                            <ul> 
+                                <?php
+                                foreach ($this->cats as $cat) {
+                                    ?>
+                                    
+                                    <div dir="rtl" id="cat<?= $cat['id'] ?>" style="border:1px solid #885908;border-radius:20px;margin:10px;width:150px">
+                                        
+                                         <font  style="color:green;display:block" align="center"><?= $cat['name'] ?></font>
+                                         <img alt="" id="img<?= $cat['id'] ?>"  
+                                                 style="width:20px;height:20px"
+                                                 src="<?= $this->baseUrl() ?>/images/down.png" 
+                                            />
+                                        <a href="<?= $this->baseUrl() ?>/user/liststories/cat_id/<?= $cat['id'] ?>">شوف اكتر</a>
+                                         <p style="display:none" id="p<?= $cat['id'] ?>"><?= $cat['description'] ?></p>
+                                            <img alt="" id="cat<?= $cat['id'] ?>_img" class="roundrect" 
+                                                 style="width:20%;height:15%;display: none;position: relative;left:-40%" 
+                                                 src="<?= $this->baseUrl() ?>/images/<?= $cat['image'] ?>" 
+                                            />
+                                    </div>
+
+
+                                    <?php
+                                }
+                                ?>
+
+                            </ul>
+                            
+                            <img alt="" style="width:180%;height:100px" src="<?= $this->baseUrl() ?>/images/activities.png"
+                             id="activities"/>
+                            
+                            
+                            <a href="<?= $this->baseUrl() ?>/user/event"
+                               class="btn btn-lg btn-default" type="button" >
+                                <img style="width:150px;display:none" id="calender"
+                                     src="<?= $this->baseUrl() ?>/images/calender.png" >
+
+                            </a>
+
+                            <script>
+                                var activities = document.getElementById("activities");
+                                var calender = document.getElementById("calender");
+
+                                function diplayCalender(){
+                                    calender.style.display = "block";
+                                }
+
+                                function hideCalender(){
+                                    calender.style.display = "none";
+                                }
+
+                                
+                                activities.addEventListener("mouseover", function() {
+                                    if (calender.style.display == "none"){
+                                        diplayCalender();
+                                    }
+                                    else{
+                                       hideCalender(); 
+                                    }
+
+                                })
+
+                                
+                                activities.addEventListener("mousedown", function() {
+                                    hideCalender();
+                                })
+
+                                function showImg(cat_no) {
+                                    var myCat = document.getElementById("cat" + cat_no);
+                                    var catImg = document.getElementById("cat" + cat_no + "_img");
+                                    var catDesc = document.getElementById("p" + cat_no);
+                                    if (catImg.style.display == "none"){
+                                        catImg.style.display = "block";
+                                        catDesc.style.display = "block";
+                                        
+                                        
+                                        myCat.style.backgroundColor = "rgb(213, 200, 200)";
+                                        /*
+                                        var aTag = document.createElement('a');
+                                        aTag.id = "link"+cat_no;
+                                        aTag.setAttribute('href',"<?= $this->baseUrl() ?>/user/liststories/cat_id/"+cat_no);
+                                        aTag.innerHTML = "شوف اكتر";
+                                        myCat.appendChild(aTag);*/
+
+                                        var down = document.getElementById("img" + cat_no);
+                                        var up = document.createElement('img');
+                                        up.src = "<?= $this->baseUrl() ?>/images/up.png";
+                                        up.id = "img"+cat_no;
+                                        up.style.width = "20px";    
+                                        up.style.height = "20px";
+                                        myCat.replaceChild(up,down);
+                                    }
+
+                                    else{
+                                        catImg.style.display = "none";
+                                        catDesc.style.display = "none";
+ 
+                                        myCat.style.backgroundColor = "white";
+                                        
+                                        //var aTag = document.getElementById("link"+cat_no);
+                                        //myCat.removeChild(aTag);
+
+                                        var up = document.getElementById("img" + cat_no);
+                                        var down = document.createElement('img');
+                                        down.src = "<?= $this->baseUrl() ?>/images/down.png";
+                                        down.id = "img"+cat_no;
+                                        down.style.width = "20px";    
+                                        down.style.height = "20px";
+                                        myCat.replaceChild(down,up);
+
+                                        
+                                    }
+                                }
+
+                                function hideImg(cat_no) {
+                                    document.getElementById("cat" + cat_no + "_img").style.display = "none";
+                                    document.getElementById("p" + cat_no).style.display = "none";
+                                    document.getElementById("cat" + cat_no).style.backgroundColor = "white"
+                                }
+
+                            </script>
+                            <?php
+                            foreach ($this->cats as $cat) {
+                                ?>
+                                <script>
+                                    var cat<?= $cat['id'] ?> = document.getElementById("cat<?= $cat['id'] ?>");
+                                    cat<?= $cat['id'] ?>.addEventListener("mousedown", function() {
+                                        showImg(<?= $cat['id'] ?>);
+                                    })
+                                    /*
+                                    cat<?= $cat['id'] ?>.addEventListener("mouseout", function() {
+                                        hideImg(<?= $cat['id'] ?>);
+                                    })*/
+
+
+                                </script>
+                            <?php } ?>
+<?php } ?>
+                    </li>
+                </ul>
+            </div>
+            <!-- end #sidebar -->
+            <div style="clear: both;">&nbsp;</div>
+        </div>
+        <!-- end #page -->
+    </div>
+    <div id="footer-content">
+        <div class="column1">
+        </div>
+
+        <div class="column2">   
+        </div>
+    </div>
+
+    <div id="footer">    
+    </div>
+    <!-- end #footer -->
+</body>
